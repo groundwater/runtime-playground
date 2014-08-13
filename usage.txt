@@ -1,0 +1,22 @@
+usage: runtime-playground COMMAND
+
+Commands:
+
+  doctor   check your system
+  demo     run the demo
+  init     create a scaffolding
+  run      run a custom build
+
+Create a project:
+
+  Create a scaffolding with the `init` command.
+
+  $ runtime-playground init
+
+Running Custom Builds:
+
+  Create and run your own JS bundle with the `run` command.
+  Your module and its dependencies will be bunndled with
+  browserify and executed on load.
+
+  $ runtime-playground run myfile.js
