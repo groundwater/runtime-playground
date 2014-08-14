@@ -17,5 +17,14 @@
     "readline-sync": "^0.4.5",
     "shelljs": "^0.3.0",
     "tempfile": "^1.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/groundwater/runtime-playground.git"
+  },
+  "bugs": {
+    "url": "https://github.com/groundwater/runtime-playground/issues"
+  },
+  "homepage": "https://github.com/groundwater/runtime-playground"
 }
