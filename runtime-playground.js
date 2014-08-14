@@ -1,47 +1,68 @@
 #!/usr/bin/env node
-require('shelljs/global')
 
+require('shelljs/global')
+require('colors')
+
+config.fatal = true
+
+var read = require('readline-sync')
+var temp = require('tempfile')
 var argv = require('minimist')(process.argv.slice(2))
-var cmd = argv._.shift()
+var cmd  = argv._.shift()
 
 if (cmd === 'doctor') {
   if (!which('qemu-system-x86_64')) {
-    echo('please install qemu')
-    echo('- on osx try: brew install qemu')
-    echo('not ok')
+    echo('please install qemu'.red)
+    echo('on osx try: brew install qemu'.grey)
+    echo('not ok'.red)
   }
   else {
-    echo('ready to run')
-    echo('- try: runtime-playground run init.js')
+    echo('ready to run'.green)
+    echo('try: runtime-playground demo'.grey)
     exit(0)
   }
   exit(1)
 }
 else if (cmd === 'init') {
-  doInit()
+  var dir = argv._.pop() || process.cwd()
+  ok = read.question('Create scaffolding in ' + dir.grey + '\nY/n > ').trim()
+  if (ok !== 'n' && ok !== 'N') {
+    doInit()
+  }
+  else {
+    echo('Abort: Nothing Created'.yellow)
+  }
 }
 else if (cmd === 'demo') {
+  echo('next try creating a custom kernel'.green)
+  echo('generate scaffolding with `runtime-playground init .`'.grey)
   doQemu(__dirname + '/demo/init.js')
 }
 else if (cmd === 'run') {
   var file = argv._.shift()
   if (!file) {
-    echo('Please specify init file')
+    echo('Please specify init file'.red)
     exit(1)
   }
-
-  doQemu(file)
+  else if (!test('-e', file)) {
+    echo(('File ' + file + ' does not exist').red)
+    exit(1)
+  }
+  else {
+    doQemu(file)
+  }
 }
 else {
-  echo(cat(__dirname + '/usage.txt'))
+  echo(cat(__dirname + '/usage.txt').grey)
   exit(1)
 }
 
 function doQemu(file) {
-  var browserify = __dirname + '/node_modules/.bin/browserify ' + file + ' -o /tmp/runtime-init-bundle.js'
+  var tempfile   = temp('.js')
+  var browserify = __dirname + '/node_modules/.bin/browserify ' + file + ' -o ' + tempfile
 
   if (exec(browserify).code !== 0) {
-    echo('browserify error')
+    echo('browserify error'.red)
     exit(1)
   }
 
@@ -54,7 +75,7 @@ function doQemu(file) {
     '-netdev user,id=mynet0,hostfwd=tcp::5555-:80',
     '-device rtl8139,netdev=mynet0,mac=1a:46:0b:ca:bc:7c',
     '-kernel ' + __dirname + '/kernel.bin',
-    '-initrd /tmp/runtime-init-bundle.js',
+    '-initrd ' + tempfile,
     '-serial stdio',
     '-localtime',
     '-M pc',
@@ -64,6 +85,6 @@ function doQemu(file) {
 }
 
 function doInit() {
-  echo('creating scaffolding')
+  echo('creating scaffolding'.green)
   cp('-R', __dirname + '/scaffolding/*', process.cwd())
 }
