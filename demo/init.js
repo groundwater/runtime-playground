@@ -1,3 +1,4 @@
+var fs = require('fs')
 var Screen = require('./screen.js')
 var map = require('./keymap.js')
 
@@ -12,8 +13,12 @@ var size  = cols * rows * bytes
 var display = new Uint16Array(buff(start, size))
 var screen  = new Screen(display)
 
+var banner = fs.readFileSync(__dirname + '/banner.txt', 'utf8')
+screen.write(banner)
+screen.newline()
+
 // welcome message
-screen.write('Welcome to Runtime')
+screen.write(' Welcome to Runtime')
 prompt()
 
 // run loop

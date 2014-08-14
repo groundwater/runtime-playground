@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "brfs": "^1.2.0",
     "browserify": "^5.10.0",
     "colors": "^0.6.2",
     "minimist": "^1.1.0",

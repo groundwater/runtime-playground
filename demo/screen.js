@@ -49,7 +49,7 @@ Screen.prototype.returnOrClear = function (){
     this.startChar()
     this.cursor[0] = 0
   } else {
-    this.returnChar()
+    this.newline()
   }
 }
 

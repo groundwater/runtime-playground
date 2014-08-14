@@ -34,8 +34,8 @@ else if (cmd === 'init') {
   }
 }
 else if (cmd === 'demo') {
-  echo('next try creating a custom kernel'.green)
-  echo('generate scaffolding with `runtime-playground init .`'.grey)
+  echo('switch to qemu to view your system'.green)
+  echo('next: generate scaffolding with `runtime-playground init .`'.grey)
   doQemu(__dirname + '/demo/init.js')
 }
 else if (cmd === 'run') {
@@ -59,7 +59,7 @@ else {
 
 function doQemu(file) {
   var tempfile   = temp('.js')
-  var browserify = __dirname + '/node_modules/.bin/browserify ' + file + ' -o ' + tempfile
+  var browserify = __dirname + '/node_modules/.bin/browserify -t brfs ' + file + ' -o ' + tempfile
 
   if (exec(browserify).code !== 0) {
     echo('browserify error'.red)
