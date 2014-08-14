@@ -59,7 +59,8 @@ else {
 
 function doQemu(file) {
   var tempfile   = temp('.js')
-  var browserify = __dirname + '/node_modules/.bin/browserify -t brfs ' + file + ' -o ' + tempfile
+  var brfs = __dirname + '/node_modules/brfs'
+  var browserify = __dirname + '/node_modules/.bin/browserify -t ' + brfs + ' ' + file + ' -o ' + tempfile
 
   if (exec(browserify).code !== 0) {
     echo('browserify error'.red)
